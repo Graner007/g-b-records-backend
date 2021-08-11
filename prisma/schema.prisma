@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Record {
+  id Int @id @default(autoincrement())
+  name String 
+  description String
+  releaseDate DateTime @default(now())
+  albumCover String
+  price Int
+  artist Artist @relation(fields: [artistId], references: [id])
+  artistId Int
+  genres Genre[]
+  wishlist Wishlist[]
+}
+
+model Artist {
+  id Int @id @default(autoincrement())
+  name String @unique
+  records Record[]
+}
+
+model Genre {
+  id Int @id @default(autoincrement())
+  name String @unique
+  records Record[]
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String @default("")
+  email String @unique
+  password String
+  signUpDate DateTime @default(now())
+  address String @default("")
+  zipcode Int @default(0)
+  country String @default("")
+  telephone String @default("")
+  orders Order[]
+  cart Cart?
+  wishlist Wishlist?
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  orderDate DateTime
+  address String
+  products OrderItem[]
+  payment Int
+  productNumber Int
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+  name String
+  albumCover String
+  price Int
+  quantity Int
+  order Order @relation(fields: [orderId], references: [id])
+  orderId Int
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+  products CartItem[]
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+  name String
+  albumCover String
+  price Int
+  quantity Int
+  cart Cart @relation(fields: [cartId], references: [id])
+  cartId Int
+}
+
+model Wishlist {
+  id Int @id @default(autoincrement())
+  products Record[]
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+}
