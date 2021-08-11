@@ -1,11 +1,12 @@
 import { Context } from "../../context";
 
-export const user = async (_parent: any, _args: any, context: Context) => {
+export const user = async (context: Context) => {
     const { userId } = context.userId;
 
-    return context.prisma.user.findUnique({ 
+    const user = await context.prisma.user.findUnique({ 
       where: { 
-        id: parseInt(userId) }, 
+        id: parseInt(userId)
+      }, 
       include: { 
         cart: {
             include: {
@@ -27,4 +28,6 @@ export const user = async (_parent: any, _args: any, context: Context) => {
         throw new Error("User, Cart, Order or Wishlist not found!");
       }
     });
-}
+
+    return user;
+};

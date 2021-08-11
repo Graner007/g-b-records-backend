@@ -1,4 +1,5 @@
 import { Context } from "../context";
+import { user } from "./user/userUtils";
 
 type toggleProductInWhislistType = {
   recordId: number;
@@ -26,27 +27,14 @@ const resolvers = {
     },
     Mutation: {
       toggleProductInWhislist: async (_parent: any, args: toggleProductInWhislistType, context: Context) => {
-        const { userId } = context.userId;
+        const currentUser = await user(context);
 
-        const user = await context.prisma.user.findUnique({ 
-          where: { 
-            id: userId
-          },
-          select: { 
-            wishlist: { 
-              select: {
-                id: true,
-                products: true
-              }
-            } 
-        }});
-
-        const record = user?.wishlist?.products.find(product => product.id === args.recordId);
+        const record = currentUser.wishlist?.products.find(product => product.id === args.recordId);
 
         if (!record) {
           return context.prisma.wishlist.update({ 
             where: { 
-              id: user?.wishlist?.id
+              id: currentUser.wishlist?.id
             },
             select: {
               products: true
@@ -63,7 +51,7 @@ const resolvers = {
         else {
           return context.prisma.wishlist.update({ 
             where: { 
-              id: user?.wishlist?.id
+              id: currentUser.wishlist?.id
             },
             select: {
               products: true
