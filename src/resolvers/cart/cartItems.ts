@@ -23,11 +23,36 @@ const resolvers = {
     },
     Mutation: {
       deleteCartItem: async (_parent: any, args: DeleteCartItemType, context: Context) => {
-        return context.prisma.cartItem.delete({
+        const { userId } = context.userId;
+
+        const user = await context.prisma.user.findUnique({
           where: {
-            id: args.cartItemId
+            id: userId
+          },
+          select: {
+            cart: {
+              include: {
+                products: true
+              }
+            }
+          },
+          rejectOnNotFound: () => {
+            throw new Error("Cart not found");
           }
         });
+
+        const cartItem = user.cart?.products.find(product => product.id === args.cartItemId);
+
+        if (cartItem) {
+          return context.prisma.cartItem.delete({
+            where: {
+              id: args.cartItemId,
+            }
+          });
+        }
+        else {
+          throw new Error("CartItem can not be deleted");
+        }
       },
       updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
         if (args.cartItemQuantity === 0) {
