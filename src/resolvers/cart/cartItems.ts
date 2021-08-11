@@ -23,33 +23,83 @@ const resolvers = {
     },
     Mutation: {
       deleteCartItem: async (_parent: any, args: DeleteCartItemType, context: Context) => {
-        return context.prisma.cartItem.delete({
+        const { userId } = context.userId;
+
+        const user = await context.prisma.user.findUnique({
           where: {
-            id: args.cartItemId
+            id: userId
+          },
+          select: {
+            cart: {
+              include: {
+                products: true
+              }
+            }
+          },
+          rejectOnNotFound: () => {
+            throw new Error("Cart not found");
           }
         });
-      },
-      updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
-        if (args.cartItemQuantity === 0) {
+
+        const cartItem = user.cart?.products.find(product => product.id === args.cartItemId);
+
+        if (cartItem) {
           return context.prisma.cartItem.delete({
             where: {
-              id: args.cartItemId
+              id: args.cartItemId,
             }
           });
         }
+        else {
+          throw new Error("CartItem can not be deleted");
+        }
+      },
+      updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
+        const { userId } = context.userId;
 
-        return context.prisma.cartItem.update({
+        const user = await context.prisma.user.findUnique({
           where: {
-            id: args.cartItemId
+            id: userId
           },
           select: {
-            name: true,
-            quantity: true
+            cart: {
+              include: {
+                products: true
+              }
+            }
           },
-          data: {
-            quantity: args.cartItemQuantity
+          rejectOnNotFound: () => {
+            throw new Error("Cart not found");
           }
         });
+
+        const cartItem = user.cart?.products.find(product => product.id === args.cartItemId);
+
+        if (cartItem) {
+          if (args.cartItemQuantity === 0) {
+            return context.prisma.cartItem.delete({
+              where: {
+                id: args.cartItemId
+              }
+            });
+          }
+  
+          return context.prisma.cartItem.update({
+            where: {
+              id: args.cartItemId
+            },
+            select: {
+              name: true,
+              quantity: true
+            },
+            data: {
+              quantity: args.cartItemQuantity
+            }
+          });
+        }
+        else {
+          throw new Error("CartItem can not be updated");
+        }
       },
       addCartItem: async (_parent: any, args: AddCartItemType, context: Context) => {
         const { userId } = context.userId;
