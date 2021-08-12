@@ -1,5 +1,5 @@
 import { Context } from '../../context';
-import { deleteCartItem } from "./cartItemUtils";
+import { addCartItem, deleteCartItem, incrementCartItemQuantity } from "./cartItemUtils";
 import { user } from "../user/userUtils";
 
 type UpdateCartItemQuantityType = {
@@ -74,31 +74,15 @@ const resolvers = {
         );
 
         if (cartItem) {
-          return context.prisma.cartItem.update({
-            where: {
-              id: cartItem.id
-            },
-            data: {
-              quantity: {
-                increment: 1
-              }
-            }
-          });
+          return incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
         }
         else {
-          const newCartItem = await context.prisma.cartItem.create({
-            data: {
-              name: args.name,
-              albumCover: args.albumCover,
-              price: args.price,
-              quantity: 1,
-              cart: {
-                connect: {
-                  id: currentUser.cart?.id
-                }
-              }
-            }
-          });
+          const newCartItem = await addCartItem({ 
+            name: args.name, 
+            albumCover: args.albumCover, 
+            price: args.price, 
+            cartId: currentUser.cart?.id 
+          }, context);
 
           await context.pubsub.publish("NEW_CART_ITEM", newCartItem);
 
