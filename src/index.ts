@@ -1,6 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-//import Stripe from "stripe";
 
 import typeDefs from "./typedefs/index";
 import resolvers from "./resolvers/index";

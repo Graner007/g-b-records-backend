@@ -14,6 +14,7 @@ const typeDefs = gql`
   extend type Query {
     orders: [Order!]!
     order(orderId: Int!): Order!
+    createPaymentSession: String!
   }
 `;
 

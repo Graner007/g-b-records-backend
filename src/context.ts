@@ -13,7 +13,7 @@ export interface Context {
 
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
-const stripe = new Stripe('sk_test_...', {
+const stripe = new Stripe('sk_test_51JNfg5AauhwgYpNeMU4405spAwZBMvDwItI1GApAVYMeLoCGJo0Dpmahw5GjBNfcuzEJlOOMc9EiZVOJKbJSw2Fr00RlhlWq2k', {
     apiVersion: '2020-08-27',
 });
 
