@@ -10,6 +10,15 @@ type Auth = {
   password: string;
 }
 
+type EditUserDetailsType = {
+  firstName: string;
+  lastName: string;
+  address: string;
+  zipcode: number;
+  telephone: string;
+  country: string;
+}
+
 const resolvers = {
     Query: {
       users: async (_parent: any, _args: any, context: Context) => {
@@ -54,6 +63,25 @@ const resolvers = {
 
         return { token, user }
       },
+      editUserDetails: async (_parent: any, args: EditUserDetailsType, context: Context) => {
+        const { userId } = context.userId;
+        
+        const editedUser = await context.prisma.user.update({
+          where: {
+            id: userId
+          },
+          data: {
+            firstName: args.firstName,
+            lastName: args.lastName,
+            address: args.address,
+            telephone: args.telephone,
+            zipcode: args.zipcode,
+            country: args.country
+          }
+        });
+
+        return editedUser;
+      }
     }
 };
 
