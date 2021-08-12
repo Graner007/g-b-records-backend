@@ -37,7 +37,8 @@ model Genre {
 
 model User {
   id Int @id @default(autoincrement())
-  name String @default("")
+  firstName String @default("")
+  lastName String @default("")
   email String @unique
   password String
   signUpDate DateTime @default(now())
