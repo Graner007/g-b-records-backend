@@ -33,6 +33,7 @@
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.12",
     "prisma-binding": "^2.1.2",
-    "pubsub": "^3.2.1"
+    "pubsub": "^3.2.1",
+    "stripe": "^8.169.0"
   }
 }
