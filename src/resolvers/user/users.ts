@@ -1,7 +1,9 @@
-import { Context } from "../context";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { APP_SECRET } from "../utils";
+
+import { Context } from "../../context";
+import { APP_SECRET } from "../../utils";
+import { user } from "./userUtils";
 
 type Auth = {
   email: string;
@@ -19,31 +21,7 @@ const resolvers = {
           }
         });
       },
-      user: async (_parent: any, _args: any, context: Context) => {
-        const { userId } = context.userId;
-
-        return context.prisma.user.findUnique({ 
-          where: { 
-            id: parseInt(userId) }, 
-          include: { 
-            cart: true, 
-            orders: { 
-              select: {
-                products: true,
-                productNumber: true
-              } 
-            }, 
-            wishlist: { 
-              select: {
-                products: true
-              } 
-            }
-          },
-          rejectOnNotFound: () => {
-            throw new Error("User or Order or Wishlist not found!");
-          }
-        });
-      }
+      user
     },
     Mutation: {
       signup: async (_parent: any, args: Auth, context: Context) => {

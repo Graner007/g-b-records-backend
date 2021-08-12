@@ -32,7 +32,8 @@ const resolvers = {
           include: { 
             artist: true,
             genres: true, 
-            wishlist: true }
+            wishlist: true 
+          }
         });
       },
       record: async (_parent: any, args: RecordType, context: Context) => {

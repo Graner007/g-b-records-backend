@@ -1,4 +1,6 @@
 import { Context } from '../../context';
+import { addCartItem, deleteCartItem, incrementCartItemQuantity } from "./cartItemUtils";
+import { user } from "../user/userUtils";
 
 type UpdateCartItemQuantityType = {
   cartItemId: number;
@@ -23,65 +25,25 @@ const resolvers = {
     },
     Mutation: {
       deleteCartItem: async (_parent: any, args: DeleteCartItemType, context: Context) => {
-        const { userId } = context.userId;
+        const currentUser = await user(context);
 
-        const user = await context.prisma.user.findUnique({
-          where: {
-            id: userId
-          },
-          select: {
-            cart: {
-              include: {
-                products: true
-              }
-            }
-          },
-          rejectOnNotFound: () => {
-            throw new Error("Cart not found");
-          }
-        });
-
-        const cartItem = user.cart?.products.find(product => product.id === args.cartItemId);
+        const cartItem = currentUser.cart?.products.find(product => product.id === args.cartItemId);
 
         if (cartItem) {
-          return context.prisma.cartItem.delete({
-            where: {
-              id: args.cartItemId,
-            }
-          });
+          return deleteCartItem({cartItemId: args.cartItemId}, context);
         }
         else {
           throw new Error("CartItem can not be deleted");
         }
       },
       updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
-        const { userId } = context.userId;
+        const currentUser = await user(context);
 
-        const user = await context.prisma.user.findUnique({
-          where: {
-            id: userId
-          },
-          select: {
-            cart: {
-              include: {
-                products: true
-              }
-            }
-          },
-          rejectOnNotFound: () => {
-            throw new Error("Cart not found");
-          }
-        });
-
-        const cartItem = user.cart?.products.find(product => product.id === args.cartItemId);
+        const cartItem = currentUser.cart?.products.find(product => product.id === args.cartItemId);
 
         if (cartItem) {
           if (args.cartItemQuantity === 0) {
-            return context.prisma.cartItem.delete({
-              where: {
-                id: args.cartItemId
-              }
-            });
+            return deleteCartItem({cartItemId: args.cartItemId}, context);
           }
   
           return context.prisma.cartItem.update({
@@ -102,25 +64,9 @@ const resolvers = {
         }
       },
       addCartItem: async (_parent: any, args: AddCartItemType, context: Context) => {
-        const { userId } = context.userId;
+        const currentUser = await user(context);
 
-        const user = await context.prisma.user.findUnique({
-          where: {
-            id: userId
-          },
-          include: {
-            cart: {
-              include: {
-                products: true
-              }
-            }
-          },
-          rejectOnNotFound: () => {
-            throw new Error("Cart not found");
-          }
-        });
-
-        const cartItem = user.cart?.products.find(product => 
+        const cartItem = currentUser.cart?.products.find(product => 
           product.name === args.name && 
           product.albumCover === args.albumCover && 
           product.price === args.price &&
@@ -128,31 +74,15 @@ const resolvers = {
         );
 
         if (cartItem) {
-          return context.prisma.cartItem.update({
-            where: {
-              id: cartItem.id
-            },
-            data: {
-              quantity: {
-                increment: 1
-              }
-            }
-          });
+          return incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
         }
         else {
-          const newCartItem = await context.prisma.cartItem.create({
-            data: {
-              name: args.name,
-              albumCover: args.albumCover,
-              price: args.price,
-              quantity: 1,
-              cart: {
-                connect: {
-                  id: user.cart?.id
-                }
-              }
-            }
-          });
+          const newCartItem = await addCartItem({ 
+            name: args.name, 
+            albumCover: args.albumCover, 
+            price: args.price, 
+            cartId: currentUser.cart?.id 
+          }, context);
 
           await context.pubsub.publish("NEW_CART_ITEM", newCartItem);
 
