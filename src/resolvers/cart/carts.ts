@@ -1,4 +1,5 @@
 import { Context } from '../../context';
+import { cart } from "./cartUtils";
 
 const resolvers = {
     Query: {
@@ -9,25 +10,7 @@ const resolvers = {
             }
         });
       },
-      cart: async (_parent: any, _args: any, context: Context) => {
-        const { userId } = context.userId;
-        
-        return context.prisma.user.findUnique({
-            where: {
-              id: userId
-            },
-            select: {
-              cart: {
-                include: {
-                  products: true
-                }
-              }
-            },
-            rejectOnNotFound: (() => {
-              throw new Error("Cart not found");
-            })
-        });
-      }
+      cart
     }
 };
 

@@ -1,5 +1,7 @@
 import { Context } from "../context";
 import { user } from "./user/userUtils";
+import { addCartItem, incrementCartItemQuantity } from "./cart/cartItemUtils";
+import { cart } from "./cart/cartUtils";
 
 type toggleProductInWhislistType = {
   recordId: number;
@@ -64,6 +66,41 @@ const resolvers = {
               } 
             } 
           });
+        }
+      },
+      addAllProductsToCart: async (_parent: any, _args: any, context: Context) => {
+        const currentUser = await user(context);
+
+        if (currentUser.wishlist?.products !== []) {
+          currentUser.wishlist?.products.forEach(async product => {
+            const cartItem = currentUser.cart?.products.find(record => 
+              product.name === record.name && 
+              product.albumCover === record.albumCover && 
+              product.price === record.price &&
+              record.quantity > 0
+            );
+    
+            if (cartItem) {
+              await incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
+            }
+            else {
+              const newCartItem = await addCartItem({ 
+                name: product.name, 
+                albumCover: product.albumCover, 
+                price: product.price, 
+                cartId: currentUser.cart?.id 
+              }, context);
+    
+              await context.pubsub.publish("NEW_CART_ITEM", newCartItem);
+            }
+          });
+
+          const userCart = await cart(context); 
+
+          return userCart;
+        }
+        else {
+          throw new Error("Wishlist is empty");
         }
       }
     }

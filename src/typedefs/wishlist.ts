@@ -13,6 +13,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     toggleProductInWhislist(recordId: Int!): Wishlist!
+    addAllProductsToCart: Cart!
   }
 `;
 
