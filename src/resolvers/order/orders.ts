@@ -1,9 +1,6 @@
 import { Context } from "../../context";
 import { user } from "../user/userUtils";
-
-type OrderType = {
-  orderId: number;
-}
+import { order } from "./orderUtils";
 
 const resolvers = {
   Query: {
@@ -14,28 +11,7 @@ const resolvers = {
         }
       });
     },
-    order: async (_parent: any, args: OrderType, context: Context) => {
-      const { userId } = context.userId;
-
-      return context.prisma.user.findUnique({
-          where: {
-            id: userId
-          },
-          select: {
-            orders: {
-              where: {
-                id: args.orderId
-              },
-              include: {
-                products: true
-              }
-            }
-          },
-          rejectOnNotFound: (() => {
-            throw new Error("Order not found!");
-          })
-      });
-    },
+    order,
     createPaymentSession: async (_parent: any, _args: any, context: Context) => {
       const currentUser = await user(context);
 
