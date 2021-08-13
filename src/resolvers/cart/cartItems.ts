@@ -1,5 +1,5 @@
 import { Context } from '../../context';
-import { addCartItem, deleteCartItem, incrementCartItemQuantity } from "./cartItemUtils";
+import { addCartItem, deleteCartItem, incrementCartItemQuantity, deleteAllCartItemForUser } from "./cartItemUtils";
 import { user } from "../user/userUtils";
 
 type UpdateCartItemQuantityType = {
@@ -88,7 +88,8 @@ const resolvers = {
 
           return newCartItem;
         }
-      }
+      },
+      deleteAllCartItemForUser
     },
     Subscription: {
       newCartItem: async (_parent: any, _args: any, context: Context) => {

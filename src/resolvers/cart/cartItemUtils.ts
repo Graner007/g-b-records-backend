@@ -1,4 +1,6 @@
 import { Context } from '../../context';
+import { user } from '../user/userUtils';
+import { cart } from './cartUtils';
 
 type AddCartItemType = {
     name: string;
@@ -52,4 +54,18 @@ export const incrementCartItemQuantity = async (args: CartItemType, context: Con
     });
 
     return incrementedCartItem;
+}
+
+export const deleteAllCartItemForUser = async (context: Context) => {
+  const currentUser = await user(context);
+
+  await context.prisma.cartItem.deleteMany({
+    where: {
+      cartId: currentUser.cart?.id
+    }
+  });
+
+  const userCart = await cart(context); 
+
+  return userCart;
 }

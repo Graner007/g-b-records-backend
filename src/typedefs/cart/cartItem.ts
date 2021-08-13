@@ -17,6 +17,7 @@ const typeDefs = gql`
     deleteCartItem(cartItemId: Int!): CartItem!
     updateCartItemQuantity(cartItemId: Int!, cartItemQuantity: Int!): CartItem!
     addCartItem(name: String!, albumCover: String!, price: Int!): CartItem!
+    deleteAllCartItemForUser: Cart!
   }
 
   extend type Subscription {
