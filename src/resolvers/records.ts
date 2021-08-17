@@ -82,7 +82,15 @@ const resolvers = {
 
         const count = await context.prisma.record.count({where});
 
-        return { records, count };
+        let minPrice = 0;
+        let maxPrice = 0;
+
+        if (records) {
+          minPrice = records.reduce((min, record) => (record.price < min ? record.price : min), records[0].price);
+          maxPrice = records.reduce((max, record) => (record.price > max ? record.price : max), records[0].price);
+        }
+
+        return { records, count, minPrice, maxPrice };
       },
       recordsBetweenTwoPrice: async (_parent: any, args: RecordsBetweenTwoPrice, context: Context) => {
         return context.prisma.record.findMany({

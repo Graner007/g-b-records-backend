@@ -18,9 +18,11 @@ const typeDefs = gql`
   type Category {
     records: [Record!]!
     count: Int!
+    minPrice: Int!
+    maxPrice: Int!
   }
 
-  input LinkOrderByInput {
+  input RecordOrderByInput {
     releaseDate: Sort
     price: Sort
     name: Sort
@@ -34,7 +36,7 @@ const typeDefs = gql`
   extend type Query {
     records: [Record!]!
     record(recordId: Int!): Record!
-    category(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): Category!
+    category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput): Category!
     recordsBetweenTwoPrice(min: Int!, max: Int!): [Record!]!
     searchRecords(searchPhrase: String!): [Record!]!
   }
