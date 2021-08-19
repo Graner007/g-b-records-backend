@@ -95,3 +95,9 @@ model Wishlist {
   user User @relation(fields: [userId], references: [id])
   userId Int @unique
 }
+
+model Media {
+  id Int @id @default(autoincrement())
+  name String @unique
+  linkUrl String @default("")
+}
