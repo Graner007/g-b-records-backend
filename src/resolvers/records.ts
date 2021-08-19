@@ -85,7 +85,7 @@ const resolvers = {
         let minPrice = 0;
         let maxPrice = 0;
 
-        if (records) {
+        if (records !== [] && records.length > 0) {
           minPrice = records.reduce((min, record) => (record.price < min ? record.price : min), records[0].price);
           maxPrice = records.reduce((max, record) => (record.price > max ? record.price : max), records[0].price);
         }
