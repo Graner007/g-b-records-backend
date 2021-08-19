@@ -100,4 +100,5 @@ model Media {
   id Int @id @default(autoincrement())
   name String @unique
   linkUrl String @default("")
+  type String @default("")
 }
