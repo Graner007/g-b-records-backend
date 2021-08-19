@@ -10,6 +10,15 @@ const resolvers = {
             }
           }
         });
+      },
+      decade: async (_parent: any, _args: any, context: Context) => {
+        return context.prisma.media.findMany({
+          where: {
+            type: {
+              contains: "decade"
+            }
+          }
+        });
       }
     }
 };

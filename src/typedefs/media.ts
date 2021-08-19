@@ -9,6 +9,7 @@ const typeDefs = gql`
 
   extend type Query {
     imageSlider: [Media!]!
+    decade: [Media!]!
   }
 `;
 
