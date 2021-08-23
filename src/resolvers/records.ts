@@ -102,7 +102,10 @@ const resolvers = {
           },
           orderBy: { 
             price: "desc"
-           }
+          },
+          include: {
+            artist: true
+          }
         });
       },
       searchRecords: async (_parent: any, args: SearchRecordsType, context: Context) => {
