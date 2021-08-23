@@ -34,6 +34,9 @@ const resolvers = {
     },
     Mutation: {
       signup: async (_parent: any, args: Auth, context: Context) => {
+        const userIsExists = await context.prisma.user.findUnique({ where: { email: args.email } });
+        if (userIsExists) { throw new Error('User already created!'); }
+
         const password = await bcrypt.hash(args.password, 10);
 
         const user = await context.prisma.user.create({ 
