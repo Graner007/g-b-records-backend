@@ -8,6 +8,7 @@ import cart from "./cart/cart";
 import cartItem from "./cart/cartItem";
 import wishlist from "./wishlist";
 import media from "./media";
+import dropdown from "./dropdown";
 import defaultSchema from "./default";
 
-export default [defaultSchema, record, artist, genre, user, order, orderItem, cart, cartItem, wishlist, media];
+export default [defaultSchema, record, artist, genre, user, order, orderItem, cart, cartItem, wishlist, dropdown, media];

@@ -7,6 +7,7 @@ import orderItems from "./order/orderItems";
 import carts from "./cart/carts";
 import cartItems from "./cart/cartItems";
 import wishlists from "./wishlists";
+import dropdowns from "./dropdowns";
 import medias from "./medias";
 
-export default [records, artists, genres, users, orders, orderItems, carts, cartItems, wishlists, medias];
+export default [records, artists, genres, users, orders, orderItems, carts, cartItems, wishlists, dropdowns, medias];
