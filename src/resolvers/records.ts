@@ -37,7 +37,7 @@ const resolvers = {
         });
       },
       record: async (_parent: any, args: RecordType, context: Context) => {
-        return context.prisma.record.findUnique({
+        const record = await context.prisma.record.findUnique({
           where: {
             id: args.recordId
           },
@@ -50,6 +50,19 @@ const resolvers = {
             throw new Error("Record not found");
           }
         });
+
+        if (context.userId !== null) {
+          const { userId } = context.userId;
+
+          await context.prisma.searchRecord.create({
+            data: {
+              name: record.name,
+              userId: userId
+            }
+          });
+        }
+
+        return record;
       },
       category: async (_parent: any, args: CategoryType, context: Context) => {
         const where = {
@@ -88,6 +101,19 @@ const resolvers = {
         if (records !== [] && records.length > 0) {
           minPrice = records.reduce((min, record) => (record.price < min ? record.price : min), records[0].price);
           maxPrice = records.reduce((max, record) => (record.price > max ? record.price : max), records[0].price);
+        }
+
+        if (context.userId !== null && records !== [] && records.length > 0) {
+          const { userId } = context.userId;
+
+          records.map(async (record) => {
+            await context.prisma.searchRecord.create({
+              data: {
+                name: record.name,
+                userId: userId
+              }
+            });
+          });
         }
 
         return { records, count, minPrice, maxPrice };
