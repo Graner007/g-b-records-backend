@@ -12,6 +12,7 @@ const typeDefs = gql`
         zipcode: Int!
         telephone: String!
         country: String!
+        searchRecords: [SearchRecord]
         orders: [Order]
         cart: Cart!
         wishlist: Wishlist!

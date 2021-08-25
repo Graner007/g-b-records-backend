@@ -35,6 +35,13 @@ model Genre {
   records Record[]
 }
 
+model SearchRecord {
+  id Int @id @default(autoincrement())
+  name String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
 model User {
   id Int @id @default(autoincrement())
   firstName String @default("")
@@ -46,6 +53,7 @@ model User {
   zipcode Int @default(0)
   country String @default("")
   telephone String @default("")
+  searchRecords SearchRecord[]
   orders Order[]
   cart Cart?
   wishlist Wishlist?
