@@ -6,8 +6,13 @@ const typeDefs = gql`
     name: String!
   }  
 
+  enum Type {
+    artist
+    genre
+  }
+
   extend type Query {
-    dropdown(type: String!): [Dropdown!]!
+    dropdown(type: Type!): [Dropdown!]!
   }
 `;
 
