@@ -11,10 +11,14 @@ export const getUserId = (req: Request, authToken?: string) => {
         if (authHeader) {
             const token = authHeader.replace('Bearer ', '');
             if (!token) { throw new Error('No token found'); }
-            return getTokenPayload(token);
+            const { userId }: any = getTokenPayload(token);
+            return userId;
         }
     } 
-    else if (authToken) { return getTokenPayload(authToken); }
+    else if (authToken) {
+        const { userId }: any = getTokenPayload(authToken);
+        return userId;
+    }
     
     throw new Error('Not authenticated');
 }

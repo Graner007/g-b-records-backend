@@ -1,11 +1,9 @@
 import { Context } from '../../context';
 
 export const cart = async (context: Context) => {
-    const { userId } = context.userId;
-    
     const user = await context.prisma.user.findUnique({
         where: {
-          id: userId
+          id: context.userId
         },
         select: {
           cart: {

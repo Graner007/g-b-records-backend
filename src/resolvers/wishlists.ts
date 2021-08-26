@@ -15,11 +15,9 @@ const resolvers = {
         });
       },
       wishlist: async (_parent: any, _args: any, context: Context) => {
-        const { userId } = context.userId;
-
         return context.prisma.wishlist.findUnique({ 
           where: { 
-            userId: userId
+            userId: context.userId
           },
           include: {
             products: true
