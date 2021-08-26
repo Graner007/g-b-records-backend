@@ -134,6 +134,58 @@ const resolvers = {
           }
         });
       },
+      recommendedRecords: async (_parent: any, _args: any, context: Context) => {
+        const latestRecords = () => {
+          return context.prisma.record.findMany({
+            include: {
+              artist: true
+            },
+            orderBy: {
+              releaseDate: "desc"
+            },
+            take: 5
+          });
+        }
+
+        if (context.userId !== null) {
+          const { userId } = context.userId;
+
+          const searchRecords = await context.prisma.searchRecord.findMany({
+            where: {
+              userId: userId
+            },
+            distinct: ["name"],
+            select: {
+              name: true
+            },
+            orderBy: {
+              id: "desc"
+            },
+            take: 5
+          });
+
+          const names = searchRecords.map(word => {return word.name});
+
+          if (searchRecords && searchRecords.length < 1) {
+            return latestRecords();
+          }
+
+          return context.prisma.record.findMany({
+            where: {
+              name: {
+                in: names
+              }
+            },
+            include: {
+              artist: true
+            },
+            take: searchRecords.length > 5 ? 5 : searchRecords.length   
+          });
+        }
+        else {
+          return latestRecords();
+        }
+      },
       searchRecords: async (_parent: any, args: SearchRecordsType, context: Context) => {
         return context.prisma.record.findMany({
           where: {

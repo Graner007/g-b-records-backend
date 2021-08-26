@@ -38,6 +38,7 @@ const typeDefs = gql`
     record(recordId: Int!): Record!
     category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput): Category!
     recordsBetweenTwoPrice(min: Int!, max: Int!): [Record!]!
+    recommendedRecords: [Record!]!
     searchRecords(searchPhrase: String!): [Record!]!
   }
 `;
