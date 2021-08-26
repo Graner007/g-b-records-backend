@@ -1,11 +1,9 @@
 import { Context } from "../../context";
 
 export const user = async (context: Context) => {
-    const { userId } = context.userId;
-
     return context.prisma.user.findUnique({ 
       where: { 
-        id: userId
+        id: context.userId
       }, 
       include: { 
         cart: {

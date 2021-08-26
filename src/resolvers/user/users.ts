@@ -92,11 +92,9 @@ const resolvers = {
         return { token, user }
       },
       editUserDetails: async (_parent: any, args: EditUserDetailsType, context: Context) => {
-        const { userId } = context.userId;
-        
         const editedUser = await context.prisma.user.update({
           where: {
-            id: userId
+            id: context.userId
           },
           data: {
             firstName: args.firstName,
