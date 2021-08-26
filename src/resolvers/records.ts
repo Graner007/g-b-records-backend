@@ -52,12 +52,10 @@ const resolvers = {
         });
 
         if (context.userId !== null) {
-          const { userId } = context.userId;
-
           await context.prisma.searchRecord.create({
             data: {
               name: record.name,
-              userId: userId
+              userId: context.userId
             }
           });
         }
@@ -104,13 +102,11 @@ const resolvers = {
         }
 
         if (context.userId !== null && records !== [] && records.length > 0) {
-          const { userId } = context.userId;
-
           records.map(async (record) => {
             await context.prisma.searchRecord.create({
               data: {
                 name: record.name,
-                userId: userId
+                userId: context.userId
               }
             });
           });
@@ -148,11 +144,9 @@ const resolvers = {
         }
 
         if (context.userId !== null) {
-          const { userId } = context.userId;
-
           const searchRecords = await context.prisma.searchRecord.findMany({
             where: {
-              userId: userId
+              userId: context.userId
             },
             distinct: ["name"],
             select: {
