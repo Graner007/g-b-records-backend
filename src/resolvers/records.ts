@@ -127,7 +127,8 @@ const resolvers = {
           },
           include: {
             artist: true
-          }
+          },
+          take: 10
         });
       },
       recommendedRecords: async (_parent: any, _args: any, context: Context) => {
