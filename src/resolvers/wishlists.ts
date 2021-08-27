@@ -1,6 +1,5 @@
 import { Context } from "../context";
 import { user } from "./user/userUtils";
-import { addCartItem, incrementCartItemQuantity } from "./cart/cartItemUtils";
 import { cart } from "./cart/cartUtils";
 
 type toggleProductInWhislistType = {
@@ -20,7 +19,15 @@ const resolvers = {
             userId: context.userId
           },
           include: {
-            products: true
+            products: {
+              include: {
+                artist: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            }
           }
         });
       }
@@ -79,17 +86,31 @@ const resolvers = {
             );
     
             if (cartItem) {
-              await incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
+              await context.prisma.cartItem.update({
+                where: {
+                  id: cartItem.id
+                },
+                data: {
+                  quantity: {
+                    increment: 1
+                  }
+                }
+            });
             }
             else {
-              const newCartItem = await addCartItem({ 
-                name: product.name, 
-                albumCover: product.albumCover, 
-                price: product.price, 
-                cartId: currentUser.cart?.id 
-              }, context);
-    
-              await context.pubsub.publish("NEW_CART_ITEM", newCartItem);
+              await context.prisma.cartItem.create({
+                data: {
+                  name: product.name,
+                  albumCover: product.albumCover,
+                  price: product.price,
+                  quantity: 1,
+                  cart: {
+                    connect: {
+                      id: currentUser.cart?.id
+                    }
+                  }
+                }
+            });
             }
           });
 

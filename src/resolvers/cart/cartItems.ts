@@ -77,16 +77,12 @@ const resolvers = {
           return incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
         }
         else {
-          const newCartItem = await addCartItem({ 
+          return addCartItem({ 
             name: args.name, 
             albumCover: args.albumCover, 
             price: args.price, 
             cartId: currentUser.cart?.id 
           }, context);
-
-          await context.pubsub.publish("NEW_CART_ITEM", newCartItem);
-
-          return newCartItem;
         }
       },
       deleteAllCartItemForUser
