@@ -6,9 +6,14 @@ const typeDefs = gql`
     products: [CartItem!]!
   }
 
+  type UserCart {
+    cart: Cart!
+    grandTotal: Int!
+  }
+
   extend type Query {
     carts: [Cart!]!
-    cart: Cart!
+    cart: UserCart!
   }
 `;
 
