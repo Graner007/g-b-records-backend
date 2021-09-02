@@ -36,6 +36,7 @@ const typeDefs = gql`
   extend type Query {
     records: [Record!]!
     record(recordId: Int!): Record!
+    recordByName(recordName: String!): Record!
     category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput): Category!
     recordsBetweenTwoPrice(min: Int!, max: Int!): [Record!]!
     recommendedRecords: [Record!]!
