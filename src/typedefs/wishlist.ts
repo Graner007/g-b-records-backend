@@ -11,8 +11,13 @@ const typeDefs = gql`
     wishlist: Wishlist!
   }
 
+  type ProductWishlist {
+    wishlist: Wishlist!
+    operationType: String!
+  }
+
   extend type Mutation {
-    toggleProductInWhislist(recordId: Int!): Wishlist!
+    toggleProductInWhislist(recordId: Int!): ProductWishlist!
     addAllProductsToCart: Cart!
   }
 `;
