@@ -25,6 +25,10 @@ type SearchRecordsType = {
   take: number;
 }
 
+type RecordByNameArgs = {
+  recordName: string;
+}
+
 const resolvers = {
     Query: {
       records: async (_parent: any, _args: any, context: Context) => {
@@ -61,6 +65,21 @@ const resolvers = {
         }
 
         return record;
+      },
+      recordByName: async (_parent: any, args: RecordByNameArgs, context: Context) => {
+        return context.prisma.record.findUnique({
+          where: {
+            name: args.recordName
+          },
+          include: { 
+            artist: true, 
+            genres: true, 
+            wishlist: true 
+          },
+          rejectOnNotFound: () => {
+            throw new Error("Record not found");
+          }
+        });
       },
       category: async (_parent: any, args: CategoryType, context: Context) => {
         const where = {
