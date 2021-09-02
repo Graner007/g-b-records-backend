@@ -39,7 +39,7 @@ const resolvers = {
         const record = currentUser.wishlist?.products.find(product => product.id === args.recordId);
 
         if (!record) {
-          return context.prisma.wishlist.update({ 
+          const wishlist = await context.prisma.wishlist.update({ 
             where: { 
               id: currentUser.wishlist?.id
             },
@@ -54,9 +54,13 @@ const resolvers = {
               } 
             } 
           });
+
+          const operationType = "add";
+
+          return { wishlist, operationType };
         }
         else {
-          return context.prisma.wishlist.update({ 
+          const wishlist = await context.prisma.wishlist.update({ 
             where: { 
               id: currentUser.wishlist?.id
             },
@@ -71,6 +75,10 @@ const resolvers = {
               } 
             } 
           });
+
+          const operationType = "remove";
+
+          return { wishlist, operationType };
         }
       },
       addAllProductsToCart: async (_parent: any, _args: any, context: Context) => {
