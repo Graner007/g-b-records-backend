@@ -67,9 +67,9 @@ const resolvers = {
         return record;
       },
       recordByName: async (_parent: any, args: RecordByNameArgs, context: Context) => {
-        return context.prisma.record.findUnique({
+        const record = await context.prisma.record.findUnique({
           where: {
-            name: args.recordName
+            name: args.recordName,
           },
           include: { 
             artist: true, 
@@ -80,6 +80,17 @@ const resolvers = {
             throw new Error("Record not found");
           }
         });
+
+        if (context.userId !== null) {
+          await context.prisma.searchRecord.create({
+            data: {
+              name: record.name,
+              userId: context.userId
+            }
+          });
+        }
+
+        return record;
       },
       category: async (_parent: any, args: CategoryType, context: Context) => {
         const where = {
