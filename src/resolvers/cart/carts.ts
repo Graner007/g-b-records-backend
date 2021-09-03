@@ -10,24 +10,28 @@ const resolvers = {
         });
       },
       cart: async (_parent: any, _args: any, context: Context) => {
-        const cart = await context.prisma.cart.findUnique({
-          where: {
-            userId: context.userId
-          },
-          include: {
-            products: true
-          },
-          rejectOnNotFound: (() => {
-            throw new Error("Cart not found");
-          })
-        });
-
-        let grandTotal = 0;
-        if (cart.products && cart.products.length > 0) {
-          cart.products.forEach(product => grandTotal += product.price);
+        if (context.userId !== null) {
+          const cart = await context.prisma.cart.findUnique({
+            where: {
+              userId: context.userId
+            },
+            include: {
+              products: true
+            },
+            rejectOnNotFound: (() => {
+              throw new Error("Cart not found");
+            })
+          });
+  
+          let grandTotal = 0;
+          if (cart.products && cart.products.length > 0) {
+            cart.products.forEach(product => grandTotal += product.price);
+          }
+  
+          return { cart, grandTotal };
         }
 
-        return { cart, grandTotal };
+        throw new Error("Please Login");
       }
     }
 };
