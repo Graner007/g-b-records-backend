@@ -2,7 +2,7 @@ import { Context } from "../context";
 import { user } from "./user/userUtils";
 import { cart } from "./cart/cartUtils";
 
-type toggleProductInWhislistType = {
+type ProductType = {
   recordId: number;
 }
 
@@ -37,7 +37,7 @@ const resolvers = {
       }
     },
     Mutation: {
-      toggleProductInWhislist: async (_parent: any, args: toggleProductInWhislistType, context: Context) => {
+      toggleProductInWhislist: async (_parent: any, args: ProductType, context: Context) => {
         const currentUser = await user(context);
 
         const record = currentUser.wishlist?.products.find(product => product.id === args.recordId);
@@ -133,6 +133,41 @@ const resolvers = {
         else {
           throw new Error("Wishlist is empty");
         }
+      },
+      deleteWishlistItem: async (_parent: any, args: ProductType, context: Context) => {
+        const currentUser = await user(context);
+
+        const record = currentUser.wishlist?.products.find(product => product.id === args.recordId);
+
+        if (record) {
+          await context.prisma.wishlist.update({ 
+            where: { 
+              id: currentUser.wishlist?.id
+            },
+            include: {
+              products: {
+                include: {
+                  artist: {
+                    select: {
+                      name: true
+                    }
+                  }
+                }
+              }
+            },
+            data: { 
+              products: { 
+                disconnect: {
+                  id: args.recordId 
+                }
+              } 
+            } 
+          });
+
+          return record;
+        }
+
+        throw new Error("Record can not be deleted from wishlist");
       }
     }
 };
