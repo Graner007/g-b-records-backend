@@ -14,22 +14,26 @@ const resolvers = {
         });
       },
       wishlist: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.wishlist.findUnique({ 
-          where: { 
-            userId: context.userId
-          },
-          include: {
-            products: {
-              include: {
-                artist: {
-                  select: {
-                    name: true
+        if (context.userId !== null) {
+          return context.prisma.wishlist.findUnique({ 
+            where: { 
+              userId: context.userId
+            },
+            include: {
+              products: {
+                include: {
+                  artist: {
+                    select: {
+                      name: true
+                    }
                   }
                 }
               }
             }
-          }
-        });
+          });
+        }
+
+        throw new Error("Please Login");
       }
     },
     Mutation: {
