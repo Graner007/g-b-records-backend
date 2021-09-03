@@ -51,8 +51,10 @@ const resolvers = {
               id: args.cartItemId
             },
             select: {
+              id: true,
               name: true,
-              quantity: true
+              quantity: true,
+              price: true
             },
             data: {
               quantity: args.cartItemQuantity
