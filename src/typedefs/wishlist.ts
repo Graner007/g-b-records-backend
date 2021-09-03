@@ -19,6 +19,7 @@ const typeDefs = gql`
   extend type Mutation {
     toggleProductInWhislist(recordId: Int!): ProductWishlist!
     addAllProductsToCart: Cart!
+    deleteWishlistItem(recordId: Int!): Record!
   }
 `;
 
