@@ -50,14 +50,9 @@ const resolvers = {
             where: {
               id: args.cartItemId
             },
-            select: {
-              id: true,
-              name: true,
-              quantity: true,
-              price: true
-            },
             data: {
-              quantity: args.cartItemQuantity
+              quantity: args.cartItemQuantity,
+              price: args.cartItemQuantity * cartItem.oneUnitPrice
             }
           });
         }
@@ -71,12 +66,12 @@ const resolvers = {
         const cartItem = currentUser.cart?.products.find(product => 
           product.name === args.name && 
           product.albumCover === args.albumCover && 
-          product.price === args.price &&
+          product.oneUnitPrice === args.price &&
           product.quantity > 0
         );
 
         if (cartItem) {
-          return incrementCartItemQuantity({ cartItemId: cartItem.id }, context);
+          return incrementCartItemQuantity({ cartItemId: cartItem.id, ontUnitprice: cartItem.oneUnitPrice }, context);
         }
         else {
           return addCartItem({ 

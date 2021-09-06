@@ -93,7 +93,7 @@ const resolvers = {
             const cartItem = currentUser.cart?.products.find(record => 
               product.name === record.name && 
               product.albumCover === record.albumCover && 
-              product.price === record.price &&
+              product.price === record.oneUnitPrice &&
               record.quantity > 0
             );
     
@@ -105,6 +105,9 @@ const resolvers = {
                 data: {
                   quantity: {
                     increment: 1
+                  },
+                  price: {
+                    increment: cartItem.oneUnitPrice
                   }
                 }
             });
@@ -115,6 +118,7 @@ const resolvers = {
                   name: product.name,
                   albumCover: product.albumCover,
                   price: product.price,
+                  oneUnitPrice: product.price,
                   quantity: 1,
                   cart: {
                     connect: {

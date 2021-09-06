@@ -5,12 +5,10 @@ const typeDefs = gql`
     id: ID!
     products: [CartItem!]!
   }
-
   type UserCart {
     cart: Cart!
     grandTotal: Int!
   }
-
   extend type Query {
     carts: [Cart!]!
     cart: UserCart!
