@@ -13,11 +13,17 @@ type CartItemType = {
     cartItemId: number;
 }
 
+type IncrementCartItemQuantityArgs = {
+  cartItemId: number;
+  ontUnitprice: number;
+}
+
 export const addCartItem = async (args: AddCartItemType, context: Context) => {
     const newCartItem = await context.prisma.cartItem.create({
         data: {
           name: args.name,
           albumCover: args.albumCover,
+          oneUnitPrice: args.price,
           price: args.price,
           quantity: 1,
           cart: {
@@ -27,6 +33,7 @@ export const addCartItem = async (args: AddCartItemType, context: Context) => {
           }
         }
     });
+
 
     return newCartItem;
 }
@@ -41,7 +48,7 @@ export const deleteCartItem = async (args: CartItemType, context: Context) => {
     return deletedCartItem;
 }
 
-export const incrementCartItemQuantity = async (args: CartItemType, context: Context) => {
+export const incrementCartItemQuantity = async (args: IncrementCartItemQuantityArgs, context: Context) => {
     const incrementedCartItem = await context.prisma.cartItem.update({
         where: {
           id: args.cartItemId
@@ -49,6 +56,9 @@ export const incrementCartItemQuantity = async (args: CartItemType, context: Con
         data: {
           quantity: {
             increment: 1
+          },
+          price: {
+            increment: args.ontUnitprice
           }
         }
     });

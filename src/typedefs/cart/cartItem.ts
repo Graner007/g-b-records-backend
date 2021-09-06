@@ -5,6 +5,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     albumCover: String!
+    oneUnitPrice: Int!
     price: Int!
     quantity: Int!
   }

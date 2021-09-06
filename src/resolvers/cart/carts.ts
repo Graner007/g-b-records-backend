@@ -25,7 +25,7 @@ const resolvers = {
   
           let grandTotal = 0;
           if (cart.products && cart.products.length > 0) {
-            cart.products.forEach(product => grandTotal += product.price);
+            cart.products.forEach(product => grandTotal += product.oneUnitPrice * product.quantity);
           }
   
           return { cart, grandTotal };
