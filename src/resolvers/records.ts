@@ -8,6 +8,8 @@ type CategoryType = {
     { name: "asc" | "desc" } | 
     { price: "asc" | "desc" } | 
     { releaseDate: "asc" | "desc" };
+  min: number;
+  max: number;
 }
 
 type RecordType = {
@@ -106,8 +108,14 @@ const resolvers = {
                   equals: args.filter
                 }
               }
-            }}
-          ]
+            }},
+          ],
+          AND: {
+            price: {
+              gt: args.min,
+              lt: args.max
+            }
+          }
         }
 
         const records = await context.prisma.record.findMany({
