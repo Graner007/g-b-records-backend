@@ -37,7 +37,7 @@ const typeDefs = gql`
     records: [Record!]!
     record(recordId: Int!): Record!
     recordByName(recordName: String!): Record!
-    category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput): Category!
+    category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput, min: Int, max: Int): Category!
     recordsBetweenTwoPrice(min: Int!, max: Int!): [Record!]!
     recommendedRecords: [Record!]!
     searchRecords(searchPhrase: String!): [Record!]!
