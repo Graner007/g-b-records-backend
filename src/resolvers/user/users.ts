@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { Context } from "../../context";
 import { APP_SECRET } from "../../utils";
+import { cart } from "../cart/cartUtils";
 
 type Auth = {
   email: string;
@@ -30,31 +31,46 @@ const resolvers = {
         });
       },
       user: async (_parent: any, _args: any, context: Context) => {
-          return context.prisma.user.findUnique({ 
+          const user = await context.prisma.user.findUnique({ 
             where: { 
               id: context.userId
             }, 
-            include: { 
-              cart: {
-                  include: {
-                      products: true
-                  }
+            include: {
+              orders: {
+                include: {
+                  products: true
+                }
               },
-              orders: { 
+              wishlist: {
                 include: {
-                    products: true
+                  products: true
                 }
-              }, 
-              wishlist: { 
-                include: {
-                    products: true
-                }
-              }
+              },
+              searchRecords: true
             },
             rejectOnNotFound: () => {
               throw new Error("User, Cart, Order or Wishlist not found!");
             }
           });
+
+          const userCart = await cart(context);
+
+          return { 
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            password: user.password,
+            signUpDate: user.signUpDate,
+            address: user.address,
+            zipcode: user.zipcode,
+            telephone: user.telephone,
+            country: user.country,
+            searchRecords: user.searchRecords,
+            orders: user.orders,
+            cart: userCart,
+            wishlist: user.wishlist
+          }
       }
     },
     Mutation: {

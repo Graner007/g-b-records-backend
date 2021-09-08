@@ -226,6 +226,13 @@ const resolvers = {
               contains: args.searchPhrase
             }
           },
+          include: {
+            artist: {
+              select: {
+                name: true
+              }
+            }
+          },
           orderBy: { 
             price: "desc"
           }
