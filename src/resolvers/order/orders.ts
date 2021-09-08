@@ -51,7 +51,7 @@ const resolvers = {
         cancel_url: "http://localhost:3000/"
       });
 
-      return session.url;
+      return {url: session.url};
     }
   }
 };

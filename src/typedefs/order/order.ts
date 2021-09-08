@@ -11,10 +11,14 @@ const typeDefs = gql`
     user: User!
   }
 
+  type CreatePaymentSession {
+    url: String!
+  }
+
   extend type Query {
     orders: [Order!]!
     order(orderId: Int!): Order!
-    createPaymentSession: String!
+    createPaymentSession: CreatePaymentSession!
   }
 `;
 
