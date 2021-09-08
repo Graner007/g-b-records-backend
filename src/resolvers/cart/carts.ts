@@ -28,7 +28,11 @@ const resolvers = {
             cart.products.forEach(product => grandTotal += product.oneUnitPrice * product.quantity);
           }
   
-          return { cart, grandTotal };
+          return { 
+            id: cart.id,
+            grandTotal: grandTotal,
+            products: cart.products
+          };
         }
 
         throw new Error("Please Login");

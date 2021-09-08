@@ -17,5 +17,14 @@ export const cart = async (context: Context) => {
         })
     });
 
-    return user.cart;
+    let grandTotal = 0;
+    if (user.cart && user.cart.products && user.cart.products.length > 0) {
+      user.cart.products.forEach(product => grandTotal += product.oneUnitPrice * product.quantity);
+    }
+  
+    return { 
+      id: user.cart?.id,
+      grandTotal: grandTotal,
+      products: user.cart?.products
+    };
 }
