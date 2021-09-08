@@ -54,6 +54,7 @@ model User {
   country String @default("")
   telephone String @default("")
   searchRecords SearchRecord[]
+  checkoutDetails CheckoutDetail[]
   orders Order[]
   cart Cart?
   wishlist Wishlist?
@@ -110,4 +111,17 @@ model Media {
   name String @unique
   linkUrl String @default("")
   type String @default("")
+}
+
+model CheckoutDetail {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String
+  address String
+  zipcode Int
+  country String
+  phone String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
 }

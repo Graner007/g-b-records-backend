@@ -10,6 +10,7 @@ import wishlist from "./wishlist";
 import media from "./media";
 import dropdown from "./dropdown";
 import searchRecord from "./searchRecord";
+import checkoutDetail from "./checkoutDetail";
 import defaultSchema from "./default";
 
-export default [defaultSchema, record, artist, genre, user, order, orderItem, cart, cartItem, wishlist, dropdown, searchRecord, media];
+export default [defaultSchema, record, artist, genre, user, order, orderItem, cart, cartItem, wishlist, dropdown, searchRecord, checkoutDetail, media];
