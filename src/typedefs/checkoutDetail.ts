@@ -13,7 +13,15 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    addCheckoutDetail: CheckoutDetail!
+    addCheckoutDetail(
+      firstName: String!
+      lastName: String!
+      address: String!
+      email: String!
+      zipcode: Int!
+      country: String!
+      telephone: String!
+    ): CheckoutDetail!
   }
 `;
 
