@@ -22,9 +22,19 @@ const resolvers = {
             payment += product.price * product.quantity;
             productNumber++;
           });
+
+          const checkoutDetail = await context.prisma.checkoutDetail.findMany({
+            where: {
+              userId: currentUser.id
+            },
+            orderBy: {
+              id: "desc"
+            },
+            take: 1
+          });
   
           const newOrder = await addOrder({
-            address: currentUser.address, 
+            address: checkoutDetail[0].address, 
             payment: payment, 
             productNumber: productNumber
             }, context);
