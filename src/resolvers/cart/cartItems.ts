@@ -1,8 +1,11 @@
 import { Context } from '../../context';
+
 import { addCartItem, deleteCartItem, incrementCartItemQuantity, deleteAllCartItemForUser } from "./cartItemUtils";
 import { user } from "../user/userUtils";
+import { getRecordById } from "../record/recordUtils";
 
 type UpdateCartItemQuantityType = {
+  recordId: number;
   cartItemId: number;
   cartItemQuantity: number;
 }
@@ -61,14 +64,7 @@ const resolvers = {
       addCartItem: async (_parent: any, args: AddCartItemType, context: Context) => {
         const currentUser = await user(context);
 
-        const record = await context.prisma.record.findUnique({
-          where: {
-            id: args.recordId
-          },
-          rejectOnNotFound: () => {
-            throw new Error("Record not found");
-          }
-        });
+        const record = await getRecordById({ recordId: args.recordId }, context);
 
         if (currentUser.cart && record) {
           const cartItem = currentUser.cart?.products.find(product => 

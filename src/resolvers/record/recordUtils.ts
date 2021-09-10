@@ -1,5 +1,5 @@
 import { Artist } from "@prisma/client";
-import { Context } from "../../context";
+import { context, Context } from "../../context";
 import { user } from "../user/userUtils";
 
 import { Record as newRecordType } from "./records";
@@ -67,4 +67,15 @@ export const latestRecords = async (context: Context) => {
     else {
       return newestRecords;
     }
+}
+
+export const getRecordById = async (args: { recordId: number }, context: Context) => {
+  return context.prisma.record.findUnique({
+    where: {
+      id: args.recordId
+    },
+    rejectOnNotFound: () => {
+      throw new Error("Record not found");
+    }
+  });
 }
