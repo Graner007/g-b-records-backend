@@ -2,10 +2,9 @@ import { Context } from '../../context';
 
 import { addCartItem, deleteCartItem, incrementCartItemQuantity, deleteAllCartItemForUser } from "./cartItemUtils";
 import { user } from "../user/userUtils";
-import { getRecordById } from "../record/recordUtils";
+import { getRecordById, getRecordByName } from "../record/recordUtils";
 
 type UpdateCartItemQuantityType = {
-  recordId: number;
   cartItemId: number;
   cartItemQuantity: number;
 }
@@ -40,14 +39,14 @@ const resolvers = {
       updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
         const currentUser = await user(context);
 
-        const record = await getRecordById({ recordId: args.recordId }, context);
-
         const cartItem = currentUser.cart?.products.find(product => product.id === args.cartItemId);
 
         if (cartItem) {
           if (args.cartItemQuantity === 0) {
             return deleteCartItem({cartItemId: args.cartItemId}, context);
           }
+
+          const record = await getRecordByName({ recordName: cartItem.name }, context);
 
           if (args.cartItemQuantity <= record.leftInStock) {
             return context.prisma.cartItem.update({
