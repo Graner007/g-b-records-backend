@@ -19,7 +19,11 @@ export const user = async (context: Context) => {
           }, 
           wishlist: { 
             include: {
-                products: true
+                products: {
+                  include: {
+                    artist: true
+                  }
+                }
             }
           }
         },
