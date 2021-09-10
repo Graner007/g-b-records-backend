@@ -22,11 +22,7 @@ const resolvers = {
             include: {
               products: {
                 include: {
-                  artist: {
-                    select: {
-                      name: true
-                    }
-                  }
+                  artist: true
                 }
               }
             }
@@ -151,11 +147,7 @@ const resolvers = {
             include: {
               products: {
                 include: {
-                  artist: {
-                    select: {
-                      name: true
-                    }
-                  }
+                  artist: true
                 }
               }
             },

@@ -1,4 +1,4 @@
-import records from "./records";
+import records from "./record/records";
 import artists from "./artists";
 import genres from "./genres";
 import users from "./user/users";

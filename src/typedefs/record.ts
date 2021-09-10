@@ -13,6 +13,7 @@ const typeDefs = gql`
     artist: Artist!
     genres: [Genre!]!
     wishlist: [Wishlist!]!
+    isInWishlist: Boolean
   }
 
   type Category {
