@@ -12,9 +12,7 @@ type DeleteCartItemType = {
 }
 
 type AddCartItemType = {
-  name: string;
-  albumCover: string;
-  price: number;
+  recordId: number;
 }
 
 const resolvers = {
@@ -63,23 +61,37 @@ const resolvers = {
       addCartItem: async (_parent: any, args: AddCartItemType, context: Context) => {
         const currentUser = await user(context);
 
-        const cartItem = currentUser.cart?.products.find(product => 
-          product.name === args.name && 
-          product.albumCover === args.albumCover && 
-          product.oneUnitPrice === args.price &&
-          product.quantity > 0
-        );
+        const record = await context.prisma.record.findUnique({
+          where: {
+            id: args.recordId
+          },
+          rejectOnNotFound: () => {
+            throw new Error("Record not found");
+          }
+        });
 
-        if (cartItem) {
-          return incrementCartItemQuantity({ cartItemId: cartItem.id, ontUnitprice: cartItem.oneUnitPrice }, context);
-        }
-        else {
-          return addCartItem({ 
-            name: args.name, 
-            albumCover: args.albumCover, 
-            price: args.price, 
-            cartId: currentUser.cart?.id 
-          }, context);
+        if (currentUser.cart && record) {
+          const cartItem = currentUser.cart?.products.find(product => 
+            product.name === record.name && 
+            product.albumCover === record.albumCover && 
+            product.oneUnitPrice === record.price &&
+            product.quantity > 0
+          );
+  
+          if (cartItem && cartItem.quantity < record.leftInStock) {
+            return incrementCartItemQuantity({ cartItemId: cartItem.id, ontUnitprice: cartItem.oneUnitPrice }, context);
+          }
+          else if (cartItem && cartItem.quantity >= record.leftInStock) {
+            throw new Error("No more Record in stock");
+          }
+          else {
+            return addCartItem({ 
+              name: record.name, 
+              albumCover: record.albumCover, 
+              price: record.price, 
+              cartId: currentUser.cart.id 
+            }, context);
+          }
         }
       },
       deleteAllCartItemForUser
