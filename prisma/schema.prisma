@@ -17,6 +17,7 @@ model Record {
   releaseDate DateTime @default(now())
   albumCover String
   price Int
+  leftInStock Int @default(10)
   artist Artist @relation(fields: [artistId], references: [id])
   artistId Int
   genres Genre[]
