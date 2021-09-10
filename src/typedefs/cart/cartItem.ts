@@ -16,7 +16,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     deleteCartItem(cartItemId: Int!): CartItem!
-    updateCartItemQuantity(recordId: Int!, cartItemId: Int!, cartItemQuantity: Int!): CartItem!
+    updateCartItemQuantity(cartItemId: Int!, cartItemQuantity: Int!): CartItem!
     addCartItem(recordId: Int!): CartItem!
     deleteAllCartItemForUser: Cart!
   }

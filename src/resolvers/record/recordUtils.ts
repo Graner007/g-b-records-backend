@@ -79,3 +79,14 @@ export const getRecordById = async (args: { recordId: number }, context: Context
     }
   });
 }
+
+export const getRecordByName = async (args: { recordName: string }, context: Context) => {
+  return context.prisma.record.findUnique({
+    where: {
+      name: args.recordName
+    },
+    rejectOnNotFound: () => {
+      throw new Error("Record not found");
+    }
+  });
+}
