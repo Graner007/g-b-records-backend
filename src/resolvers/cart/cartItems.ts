@@ -40,22 +40,29 @@ const resolvers = {
       updateCartItemQuantity: async (_parent: any, args: UpdateCartItemQuantityType, context: Context) => {
         const currentUser = await user(context);
 
+        const record = await getRecordById({ recordId: args.recordId }, context);
+
         const cartItem = currentUser.cart?.products.find(product => product.id === args.cartItemId);
 
         if (cartItem) {
           if (args.cartItemQuantity === 0) {
             return deleteCartItem({cartItemId: args.cartItemId}, context);
           }
-  
-          return context.prisma.cartItem.update({
-            where: {
-              id: args.cartItemId
-            },
-            data: {
-              quantity: args.cartItemQuantity,
-              price: args.cartItemQuantity * cartItem.oneUnitPrice
-            }
-          });
+
+          if (args.cartItemQuantity <= record.leftInStock) {
+            return context.prisma.cartItem.update({
+              where: {
+                id: args.cartItemId
+              },
+              data: {
+                quantity: args.cartItemQuantity,
+                price: args.cartItemQuantity * cartItem.oneUnitPrice
+              }
+            });
+          }
+          else {
+            throw new Error("No more Record in stock");
+          }
         }
         else {
           throw new Error("CartItem can not be updated");

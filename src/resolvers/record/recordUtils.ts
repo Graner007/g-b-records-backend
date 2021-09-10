@@ -1,5 +1,5 @@
 import { Artist } from "@prisma/client";
-import { context, Context } from "../../context";
+import { Context } from "../../context";
 import { user } from "../user/userUtils";
 
 import { Record as newRecordType } from "./records";
