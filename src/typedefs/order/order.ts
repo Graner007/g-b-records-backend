@@ -15,10 +15,17 @@ const typeDefs = gql`
     url: String!
   }
 
+  type CheckoutSession {
+    id: String!
+    customerEmail: String
+    paymentSuccess: Boolean!
+  }
+
   extend type Query {
     orders: [Order!]!
     order(orderId: Int!): Order!
     createPaymentSession: CreatePaymentSession!
+    checkoutSession(checkoutSessionId: String!): CheckoutSession!
   }
 `;
 
