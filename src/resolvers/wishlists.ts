@@ -6,14 +6,14 @@ type ProductType = {
   recordId: number;
 }
 
+type WishlistArgs = {
+  take?: number;
+  skip?: number;
+}
+
 const resolvers = {
     Query: {
-      wishlists: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.wishlist.findMany({
-          include: { products: true }
-        });
-      },
-      wishlist: async (_parent: any, _args: any, context: Context) => {
+      wishlist: async (_parent: any, args: WishlistArgs, context: Context) => {
         if (context.userId !== null) {
           return context.prisma.wishlist.findUnique({ 
             where: { 
@@ -23,7 +23,9 @@ const resolvers = {
               products: {
                 include: {
                   artist: true
-                }
+                },
+                take: args.take,
+                skip: args.skip
               }
             }
           });

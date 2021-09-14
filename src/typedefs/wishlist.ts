@@ -7,8 +7,7 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    wishlists: [Wishlist!]!
-    wishlist: Wishlist!
+    wishlist(take: Int, skip: Int): Wishlist!
   }
 
   type ProductWishlist {
