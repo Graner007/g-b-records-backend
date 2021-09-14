@@ -14,13 +14,23 @@ const resolvers = {
       successfulPayment: async (_parent: any, _args: any, context: Context) => {
         const currentUser = await user(context);
 
-        if (currentUser.cart?.products !== []) {
+        if (currentUser.cart && currentUser.cart.products.length > 0) {
           let payment = 0;
           let productNumber = 0;
 
-          currentUser.cart?.products.forEach(product => {
+          currentUser.cart.products.forEach(async product => {
             payment += product.price * product.quantity;
             productNumber++;
+            await context.prisma.record.update({
+              where: {
+                name: product.name
+              },
+              data: {
+                leftInStock: {
+                  decrement: product.quantity
+                }
+              }
+            });
           });
 
           const checkoutDetail = await context.prisma.checkoutDetail.findMany({
@@ -39,7 +49,7 @@ const resolvers = {
             productNumber: productNumber
             }, context);
   
-          currentUser.cart?.products.map(product => {
+          currentUser.cart.products.map(product => {
             addOrderItem({
               name: product.name, 
               albumCover: product.albumCover, 

@@ -64,7 +64,7 @@ const resolvers = {
             where: { 
               id: currentUser.wishlist?.id
             },
-            select: {
+            include: {
               products: true
             },
             data: { 
@@ -115,6 +115,7 @@ const resolvers = {
                   albumCover: product.albumCover,
                   price: product.price,
                   oneUnitPrice: product.price,
+                  leftInStock: product.leftInStock,
                   quantity: 1,
                   cart: {
                     connect: {

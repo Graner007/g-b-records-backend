@@ -96,6 +96,7 @@ model CartItem {
   oneUnitPrice Int @default(0)
   price Int @default(0)
   quantity Int
+  leftInStock Int 
   cart Cart @relation(fields: [cartId], references: [id])
   cartId Int
 }

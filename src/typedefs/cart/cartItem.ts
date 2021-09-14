@@ -7,6 +7,7 @@ const typeDefs = gql`
     albumCover: String!
     oneUnitPrice: Int!
     price: Int!
+    leftInStock: Int!
     quantity: Int!
   }
 
