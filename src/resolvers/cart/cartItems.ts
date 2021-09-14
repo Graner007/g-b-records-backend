@@ -91,6 +91,7 @@ const resolvers = {
               name: record.name, 
               albumCover: record.albumCover, 
               price: record.price, 
+              leftInStock: record.leftInStock,
               cartId: currentUser.cart.id 
             }, context);
           }

@@ -10,6 +10,7 @@ const typeDefs = gql`
     releaseDate: DateTime!
     albumCover: String!
     price: Int!
+    leftInStock: Int!
     artist: Artist!
     genres: [Genre!]!
     wishlist: [Wishlist!]!

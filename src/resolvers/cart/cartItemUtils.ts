@@ -7,6 +7,7 @@ type AddCartItemType = {
     albumCover: string;
     price: number;
     cartId: number | undefined;
+    leftInStock: number;
 }
 
 type CartItemType = {
@@ -19,12 +20,13 @@ type IncrementCartItemQuantityArgs = {
 }
 
 export const addCartItem = async (args: AddCartItemType, context: Context) => {
-    const newCartItem = await context.prisma.cartItem.create({
+    return context.prisma.cartItem.create({
         data: {
           name: args.name,
           albumCover: args.albumCover,
           oneUnitPrice: args.price,
           price: args.price,
+          leftInStock: args.leftInStock,
           quantity: 1,
           cart: {
             connect: {
@@ -33,23 +35,18 @@ export const addCartItem = async (args: AddCartItemType, context: Context) => {
           }
         }
     });
-
-
-    return newCartItem;
 }
 
 export const deleteCartItem = async (args: CartItemType, context: Context) => {
-    const deletedCartItem = await context.prisma.cartItem.delete({
+    return context.prisma.cartItem.delete({
         where: {
           id: args.cartItemId,
         }
     });
-
-    return deletedCartItem;
 }
 
 export const incrementCartItemQuantity = async (args: IncrementCartItemQuantityArgs, context: Context) => {
-    const incrementedCartItem = await context.prisma.cartItem.update({
+    return context.prisma.cartItem.update({
         where: {
           id: args.cartItemId
         },
@@ -62,8 +59,6 @@ export const incrementCartItemQuantity = async (args: IncrementCartItemQuantityA
           }
         }
     });
-
-    return incrementedCartItem;
 }
 
 export const deleteAllCartItemForUser = async (context: Context) => {
