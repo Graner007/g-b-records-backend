@@ -9,10 +9,6 @@ const typeDefs = gql`
     quantity: Int!
   }
 
-  extend type Query {
-    orderItems: [OrderItem!]!
-  }
-
   extend type Mutation {
     successfulPayment: Order!
   }

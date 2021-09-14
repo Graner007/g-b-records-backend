@@ -2,13 +2,6 @@ import { Context } from '../../context';
 
 const resolvers = {
     Query: {
-      carts: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.cart.findMany({
-            include: { 
-              products: true 
-            }
-        });
-      },
       cart: async (_parent: any, _args: any, context: Context) => {
         if (context.userId !== null) {
           const cart = await context.prisma.cart.findUnique({

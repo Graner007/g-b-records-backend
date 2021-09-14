@@ -8,7 +8,6 @@ const typeDefs = gql`
   }
   
   extend type Query {
-    carts: [Cart!]!
     cart: Cart!
   }
 `;

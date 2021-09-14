@@ -11,10 +11,6 @@ const typeDefs = gql`
     quantity: Int!
   }
 
-  extend type Query {
-    cartItems: [CartItem!]!
-  }
-
   extend type Mutation {
     deleteCartItem(cartItemId: Int!): CartItem!
     updateCartItemQuantity(cartItemId: Int!, cartItemQuantity: Int!): CartItem!

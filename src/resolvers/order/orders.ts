@@ -12,7 +12,14 @@ type CheckoutSessionArgs = {
 const resolvers = {
   Query: {
     orders: async (_parent: any, _args: any, context: Context) => {
+      const currentUser = await user(context);
+
+      if (!currentUser) { throw Error("Please login"); }
+
       return context.prisma.order.findMany({
+        where: {
+          userId: currentUser.id
+        },
         include: { 
           products: true 
         }

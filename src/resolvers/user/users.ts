@@ -21,15 +21,6 @@ type EditUserDetailsType = {
 
 const resolvers = {
     Query: {
-      users: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.user.findMany({
-          include: { 
-            cart: true, 
-            orders: true, 
-            wishlist: true 
-          }
-        });
-      },
       user: async (_parent: any, _args: any, context: Context) => {
           const user = await context.prisma.user.findUnique({ 
             where: { 
@@ -39,14 +30,17 @@ const resolvers = {
               orders: {
                 include: {
                   products: true
+                },
+                take: 5,
+                orderBy: { 
+                  orderDate: "desc"
                 }
               },
               wishlist: {
                 include: {
                   products: true
                 }
-              },
-              searchRecords: true
+              }
             },
             rejectOnNotFound: () => {
               throw new Error("User, Cart, Order or Wishlist not found!");
@@ -66,7 +60,6 @@ const resolvers = {
             zipcode: user.zipcode,
             telephone: user.telephone,
             country: user.country,
-            searchRecords: user.searchRecords,
             orders: user.orders,
             cart: userCart,
             wishlist: user.wishlist

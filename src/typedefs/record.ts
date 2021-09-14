@@ -36,7 +36,6 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    records: [Record!]!
     record(recordId: Int!): Record!
     recordByName(recordName: String!): Record!
     category(filter: String, skip: Int, take: Int, orderBy: RecordOrderByInput, min: Int, max: Int): Category!

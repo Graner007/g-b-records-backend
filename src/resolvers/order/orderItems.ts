@@ -5,11 +5,6 @@ import { addOrderItem } from "./orderItemUtils";
 import { addOrder, order } from "./orderUtils";
 
 const resolvers = {
-    Query: {
-      orderItems: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.orderItem.findMany();
-      }
-    },
     Mutation: {
       successfulPayment: async (_parent: any, _args: any, context: Context) => {
         const currentUser = await user(context);
