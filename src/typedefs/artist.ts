@@ -6,10 +6,6 @@ const typeDefs = gql`
     name: String!
     records: [Record!]!
   }
-
-  extend type Query {
-    artists: [Artist!]!
-  }
 `;
 
 export default typeDefs;

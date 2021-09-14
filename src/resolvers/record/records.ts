@@ -50,15 +50,6 @@ export type Record = {
 
 const resolvers = {
     Query: {
-      records: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.record.findMany({
-          include: { 
-            artist: true,
-            genres: true, 
-            wishlist: true 
-          }
-        });
-      },
       record: async (_parent: any, args: RecordType, context: Context) => {
         const record = await context.prisma.record.findUnique({
           where: {

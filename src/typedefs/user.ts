@@ -24,7 +24,6 @@ const typeDefs = gql`
     }
 
     extend type Query {
-        users: [User!]!
         user: User!
         loggedIn: Boolean!
     }

@@ -1,6 +1,4 @@
 import records from "./record/records";
-import artists from "./artists";
-import genres from "./genres";
 import users from "./user/users";
 import orders from "./order/orders";
 import orderItems from "./order/orderItems";
@@ -11,4 +9,4 @@ import dropdowns from "./dropdowns";
 import checkoutDetails from "./checkoutDetails";
 import medias from "./medias";
 
-export default [records, artists, genres, users, orders, orderItems, carts, cartItems, wishlists, dropdowns, checkoutDetails, medias];
+export default [records, users, orders, orderItems, carts, cartItems, wishlists, dropdowns, checkoutDetails, medias];

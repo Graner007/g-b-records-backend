@@ -18,11 +18,6 @@ type AddCartItemType = {
 }
 
 const resolvers = {
-    Query: {
-      cartItems: async (_parent: any, _args: any, context: Context) => {
-        return context.prisma.cartItem.findMany();
-      }
-    },
     Mutation: {
       deleteCartItem: async (_parent: any, args: DeleteCartItemType, context: Context) => {
         const currentUser = await user(context);
