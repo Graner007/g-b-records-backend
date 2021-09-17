@@ -26,7 +26,35 @@ describe('createTestClient', () => {
     `;
 
     type RecommendedRecordsType = {
-        recommendedRecords: Record[];
+      recommendedRecords: Record[];
+    }
+
+    const RECORDS_BETWEEN_TWO_PRICE = gql`
+      query RecordsBetweenTwoPriceQuery(
+        $min: Int!
+        $max: Int!
+      ) {
+        recordsBetweenTwoPrice(min: $min, max: $max) {
+            id
+            name
+            price
+            albumCover
+            artist {
+                id
+                name
+            }
+            isInWishlist
+        }
+      }
+    `;
+
+    type RecordsBetweenTwoPriceType = {
+      recordsBetweenTwoPrice: Record[];
+    }
+
+    type RecordsBetweenTwoPriceVars = {
+      min: number;
+      max: number;
     }
   
     test('should equal recommended records length', async () => {
@@ -102,4 +130,25 @@ describe('createTestClient', () => {
 
       expect(resultRecords[0]).toHaveProperty("isInWishlist", true);
   });
+
+  test('should return record between two price', async () => {
+    const { query } = createTestClient({
+      apolloServer
+    });
+
+    const min = 5;
+    const max = 20;
+    
+    const { data } = await query<RecordsBetweenTwoPriceType, RecordsBetweenTwoPriceVars>(RECORDS_BETWEEN_TWO_PRICE, {
+      variables: {
+        min: min,
+        max: max
+      }
+    });
+
+    data?.recordsBetweenTwoPrice.forEach(record => {
+      expect(record.price).toBeGreaterThan(min);
+      expect(record.price).toBeLessThan(max);
+    });
+});
 });
