@@ -4,7 +4,7 @@ import { user } from "../user/userUtils";
 
 import { Record as newRecordType } from "./records";
 
-type Record = {
+export type Record = {
     id: number;
     name: string;
     description: string;
@@ -12,6 +12,7 @@ type Record = {
     albumCover: string;
     price: number;
     artist: Artist;
+    leftInStock: number;
 }
 
 export const getRecordsWithInWishlistField = (records: Record[], wishlistProducts: Record[]) => {
@@ -28,7 +29,8 @@ export const getRecordsWithInWishlistField = (records: Record[], wishlistProduct
                 releaseDate: record.releaseDate,
                 price: record.price,
                 artist: record.artist,
-                isInWishlist: true
+                isInWishlist: true,
+                leftInStock: record.leftInStock
             });
         }
         else {
@@ -40,7 +42,8 @@ export const getRecordsWithInWishlistField = (records: Record[], wishlistProduct
                 releaseDate: record.releaseDate,
                 price: record.price,
                 artist: record.artist,
-                isInWishlist: false
+                isInWishlist: false,
+                leftInStock: record.leftInStock
             });
         }
     }

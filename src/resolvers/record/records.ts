@@ -46,6 +46,7 @@ export type Record = {
   genres?: Genre[];
   wishlist?: Wishlist[];
   isInWishlist: boolean;
+  leftInStock: number;
 }
 
 const resolvers = {
